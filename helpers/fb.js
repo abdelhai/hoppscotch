@@ -32,7 +32,34 @@ export class FirebaseInstance {
     this.currentHistory = []
     this.currentCollections = []
     this.currentEnvironments = []
+    
+    // DETA dev
+    this.url = p => `https://6r4u7v.deta.dev/api${p}`
+    if (true) {
+      this.currentUser = {uid: 1, displayName: "mustafa", email: "mustafa@deta.sh",  photoURL: "https://avatars2.githubusercontent.com/u/1752577"}
+      this.currentSettings = [{value: true}, {value: true}, {value: true}] // TODO: what's inside
 
+      // get the notes
+      fetch(this.url("/notes")).then(r => r.json()).then(d => {
+        this.currentFeeds = d
+      }).catch(e => console.error(e))
+
+      // get the envs
+      fetch(this.url("/envs")).then(r => r.json()).then(d => {
+        this.currentEnvironments = d.environment
+      }).catch(e => console.error(e))
+
+      // get the collections
+      fetch(this.url("/collections")).then(r => r.json()).then(d => {
+        this.currentCollections = d.collection
+      }).catch(e => console.error(e))
+
+    // get the history
+    fetch(this.url("/history")).then(r => r.json()).then(d => {
+      this.currentHistory = d
+    }).catch(e => console.error(e))
+
+    } else {
     this.app.auth().onAuthStateChanged((user) => {
       if (user) {
         this.currentUser = user
@@ -97,39 +124,9 @@ export class FirebaseInstance {
             this.currentHistory = history
           })
 
-        this.usersCollection
-          .doc(this.currentUser.uid)
-          .collection("collections")
-          .onSnapshot((collectionsRef) => {
-            const collections = []
-            collectionsRef.forEach((doc) => {
-              const collection = doc.data()
-              collection.id = doc.id
-              collections.push(collection)
-            })
-            if (collections.length > 0) {
-              this.currentCollections = collections[0].collection
-            }
-          })
-
-        this.usersCollection
-          .doc(this.currentUser.uid)
-          .collection("environments")
-          .onSnapshot((environmentsRef) => {
-            const environments = []
-            environmentsRef.forEach((doc) => {
-              const environment = doc.data()
-              environment.id = doc.id
-              environments.push(environment)
-            })
-            if (environments.length > 0) {
-              this.currentEnvironments = environments[0].environment
-            }
-          })
-      } else {
-        this.currentUser = null
-      }
+      } 
     })
+    }
   }
 
   async signInUserWithGoogle() {
@@ -157,7 +154,7 @@ export class FirebaseInstance {
 
   async writeFeeds(message, label) {
     const dt = {
-      createdOn: new Date(),
+      created_on: new Date(),
       author: this.currentUser.uid,
       author_name: this.currentUser.displayName,
       author_image: this.currentUser.photoURL,
@@ -166,7 +163,12 @@ export class FirebaseInstance {
     }
 
     try {
-      await this.usersCollection.doc(this.currentUser.uid).collection("feeds").add(dt)
+      console.log("saving a note", this.currentUser.uid, dt)
+      fetch(this.url("/notes"), {
+        method: "post",
+        body: JSON.stringify(dt)
+      })
+      // await this.usersCollection.doc(this.currentUser.uid).collection("feeds").add(dt)
     } catch (e) {
       console.error("error inserting", dt, e)
       throw e
@@ -205,12 +207,16 @@ export class FirebaseInstance {
   }
 
   async writeHistory(entry) {
-    const hs = entry
-
+    console.log("writeHistory", entry)
     try {
-      await this.usersCollection.doc(this.currentUser.uid).collection("history").add(hs)
+      // await this.usersCollection.doc(this.currentUser.uid).collection("history").add(hs)
+      
+      fetch(this.url("/history"), {
+        method: "post",
+        body: JSON.stringify(entry)
+      })
     } catch (e) {
-      console.error("error inserting", hs, e)
+      console.error("error inserting", entry, e)
       throw e
     }
   }
@@ -253,7 +259,7 @@ export class FirebaseInstance {
 
   async writeCollections(collection) {
     const cl = {
-      updatedOn: new Date(),
+      updated_on: new Date(),
       author: this.currentUser.uid,
       author_name: this.currentUser.displayName,
       author_image: this.currentUser.photoURL,
@@ -261,11 +267,16 @@ export class FirebaseInstance {
     }
 
     try {
-      await this.usersCollection
-        .doc(this.currentUser.uid)
-        .collection("collections")
-        .doc("sync")
-        .set(cl)
+      // await this.usersCollection
+      //   .doc(this.currentUser.uid)
+      //   .collection("collections")
+      //   .doc("sync")
+      //   .set(cl)
+      console.log("sync collections", cl)
+      fetch(this.url("/collections"), {
+        method: "post",
+        body: JSON.stringify(cl)
+      })
     } catch (e) {
       console.error("error updating", cl, e)
 
@@ -275,7 +286,7 @@ export class FirebaseInstance {
 
   async writeEnvironments(environment) {
     const ev = {
-      updatedOn: new Date(),
+      updated_on: new Date(),
       author: this.currentUser.uid,
       author_name: this.currentUser.displayName,
       author_image: this.currentUser.photoURL,
@@ -283,11 +294,11 @@ export class FirebaseInstance {
     }
 
     try {
-      await this.usersCollection
-        .doc(this.currentUser.uid)
-        .collection("environments")
-        .doc("sync")
-        .set(ev)
+      console.log("writeEnvironments", ev)
+      fetch(this.url("/envs"), {
+        method: "post",
+        body: JSON.stringify(ev)
+      })
     } catch (e) {
       console.error("error updating", ev, e)
 

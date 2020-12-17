@@ -8,7 +8,7 @@
         </nuxt-link>
       </span>
       <span>
-        <a
+        <!-- <a
           href="https://www.deta.sh/?ref=hoppscotch"
           target="_blank"
           rel="noopener"
@@ -16,7 +16,7 @@
         >
           Deploy your api for free on Deta
           <img class="w-8 ml-2" src="~assets/images/deta_portal.svg" alt="Deta" />
-        </a>
+        </a> -->
         <button
           class="icon"
           id="installPWA"
@@ -76,9 +76,9 @@
                 </button>
               </nuxt-link>
             </div>
-            <div>
+            <!-- <div>
               <logout />
-            </div>
+            </div> -->
           </template>
         </v-popover>
         <v-popover>
@@ -222,34 +222,34 @@ export default {
       })
     }
 
-    let showAd = localStorage.getItem("showAd") === "no"
-    if (!showAd) {
-      setTimeout(() => {
-        this.$toast.clear()
-        this.$toast.show(
-          "<span><a href='https://github.com/sponsors/hoppscotch' target='_blank' rel='noopener'>Sponsor us to support Hoppscotch open source project 💖</a><br><sub>Whoosh this away to dismiss.</sub></span>",
-          {
-            icon: "",
-            duration: 0,
-            theme: "toasted-ad",
-            action: [
-              {
-                text: "Sponsor",
-                icon: "chevron_right",
-                onClick: (e, toastObject) => {
-                  localStorage.setItem("showAd", "no")
-                  toastObject.goAway(0)
-                  window.open("https://github.com/sponsors/hoppscotch")
-                },
-              },
-            ],
-            onComplete() {
-              localStorage.setItem("showAd", "no")
-            },
-          }
-        )
-      }, 8000)
-    }
+    // let showAd = localStorage.getItem("showAd") === "no"
+    // if (!showAd) {
+    //   setTimeout(() => {
+    //     this.$toast.clear()
+    //     this.$toast.show(
+    //       "<span><a href='https://github.com/sponsors/hoppscotch' target='_blank' rel='noopener'>Sponsor us to support Hoppscotch open source project 💖</a><br><sub>Whoosh this away to dismiss.</sub></span>",
+    //       {
+    //         icon: "",
+    //         duration: 0,
+    //         theme: "toasted-ad",
+    //         action: [
+    //           {
+    //             text: "Sponsor",
+    //             icon: "chevron_right",
+    //             onClick: (e, toastObject) => {
+    //               localStorage.setItem("showAd", "no")
+    //               toastObject.goAway(0)
+    //               window.open("https://github.com/sponsors/hoppscotch")
+    //             },
+    //           },
+    //         ],
+    //         onComplete() {
+    //           localStorage.setItem("showAd", "no")
+    //         },
+    //       }
+    //     )
+    //   }, 8000)
+    // }
 
     let showExtensionsToast = localStorage.getItem("showExtensionsToast") === "yes"
     // Just return if showExtensionsToast is "no"

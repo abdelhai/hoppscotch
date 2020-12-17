@@ -50,8 +50,11 @@ export default {
   },
   methods: {
     syncCollections() {
+      console.log("syncCollections")
       if (fb.currentUser !== null) {
+        console.log("syncCollections currentUser")
         if (fb.currentSettings[0].value) {
+          console.log("syncCollections currentUser currentSettings")
           fb.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
         }
       }

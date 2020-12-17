@@ -15,10 +15,10 @@
         >
           {{ version.name }}
         </a>
-        <a class="footer-link" href="https://www.netlify.com" target="_blank" rel="noopener">
+        <!-- <a class="footer-link" href="https://www.netlify.com" target="_blank" rel="noopener">
           Powered by Netlify
-        </a>
-        <span class="footer-link"> Sponsored by </span>
+        </a> -->
+        <!-- <span class="footer-link"> Sponsored by </span>
         <span>
           <a
             class="footer-link"
@@ -37,7 +37,7 @@
           >
             Paw
           </a>
-        </span>
+        </span> -->
         <!-- <span v-if="version.hash">
           -
           <a
