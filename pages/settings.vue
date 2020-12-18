@@ -3,27 +3,6 @@
     <pw-section class="green" :label="$t('account')" ref="account" no-legend>
       <div class="flex flex-col">
         <label>{{ $t("account") }}</label>
-        <div v-if="fb.currentUser">
-          <button class="icon">
-            <img
-              v-if="fb.currentUser.photoURL"
-              :src="fb.currentUser.photoURL"
-              class="rounded-full material-icons"
-            />
-            <i v-else class="material-icons">account_circle</i>
-            <span>
-              {{ fb.currentUser.displayName || $t("nothing_found") }}
-            </span>
-          </button>
-          <br />
-          <button class="icon">
-            <i class="material-icons">email</i>
-            <span>
-              {{ fb.currentUser.email || $t("nothing_found") }}
-            </span>
-          </button>
-          <br />
-          <logout />
           <p v-for="setting in fb.currentSettings" :key="setting.id">
             <pw-toggle
               :key="setting.name"
@@ -40,13 +19,6 @@
               <span>{{ $t("turn_on") + " " + $t("sync") }}</span>
             </button>
           </p>
-        </div>
-        <div v-else>
-          <label>{{ $t("login_with") }}</label>
-          <p>
-            <login />
-          </p>
-        </div>
       </div>
     </pw-section>
 

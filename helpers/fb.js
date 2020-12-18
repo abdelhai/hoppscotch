@@ -161,27 +161,18 @@ export class FirebaseInstance {
       message,
       label,
     }
-
-    try {
       console.log("saving a note", this.currentUser.uid, dt)
       fetch(this.url("/notes"), {
         method: "post",
         body: JSON.stringify(dt)
       })
-      // await this.usersCollection.doc(this.currentUser.uid).collection("feeds").add(dt)
-    } catch (e) {
-      console.error("error inserting", dt, e)
-      throw e
-    }
   }
 
   async deleteFeed(id) {
-    try {
-      await this.usersCollection.doc(this.currentUser.uid).collection("feeds").doc(id).delete()
-    } catch (e) {
-      console.error("error deleting", id, e)
-      throw e
-    }
+    console.log("deteleFeed", id)
+    fetch(this.url(`/notes?key=${id}`), {
+      method: "delete",
+    })
   }
 
   async writeSettings(setting, value) {
@@ -222,36 +213,30 @@ export class FirebaseInstance {
   }
 
   async deleteHistory(entry) {
-    try {
-      await this.usersCollection
-        .doc(this.currentUser.uid)
-        .collection("history")
-        .doc(entry.id)
-        .delete()
-    } catch (e) {
-      console.error("error deleting", entry, e)
-      throw e
-    }
+    console.log("deleteHistory", entry)
+    fetch(this.url(`/history?key=${entry.key}`), {
+      method: "delete",
+    })
   }
 
   async clearHistory() {
-    const { docs } = await this.usersCollection
-      .doc(this.currentUser.uid)
-      .collection("history")
-      .get()
-
-    await Promise.all(docs.map((e) => this.deleteHistory(e)))
+    fetch(this.url(`/history/all`), {
+      method: "delete",
+    })
+    this.currentHistory = []
   }
 
   async toggleStar(entry, value) {
+    entry.star = value
+    console.log("toggleStar", entry, value)
     try {
-      await this.usersCollection
-        .doc(this.currentUser.uid)
-        .collection("history")
-        .doc(entry.id)
-        .update({ star: value })
+      fetch(this.url("/history"), {
+        method: "post",
+        body: JSON.stringify(entry)
+      })
+      
     } catch (e) {
-      console.error("error deleting", entry, e)
+      console.error("error starring", entry, e)
 
       throw e
     }
