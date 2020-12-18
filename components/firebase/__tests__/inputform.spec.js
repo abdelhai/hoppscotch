@@ -1,15 +1,15 @@
 import inputform from "../inputform"
 import { shallowMount } from "@vue/test-utils"
 
-jest.mock("~/helpers/fb", () => ({
+jest.mock("~/helpers/db", () => ({
   __esModule: true,
 
-  fb: {
+  db: {
     writeFeeds: jest.fn(() => Promise.resolve()),
   },
 }))
 
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 const factory = () =>
   shallowMount(inputform, {
@@ -19,7 +19,7 @@ const factory = () =>
   })
 
 beforeEach(() => {
-  fb.writeFeeds.mockClear()
+  db.writeFeeds.mockClear()
 })
 
 describe("inputform", () => {
@@ -39,7 +39,7 @@ describe("inputform", () => {
 
     await addButton.trigger("click")
 
-    expect(fb.writeFeeds).toHaveBeenCalledTimes(1)
+    expect(db.writeFeeds).toHaveBeenCalledTimes(1)
   })
   test("doesn't call writeFeeds when submitted without a data", async () => {
     const wrapper = factory()
@@ -48,7 +48,7 @@ describe("inputform", () => {
 
     await addButton.trigger("click")
 
-    expect(fb.writeFeeds).not.toHaveBeenCalled()
+    expect(db.writeFeeds).not.toHaveBeenCalled()
   })
   test("doesn't call writeFeeds when message or label is null", async () => {
     const wrapper = factory()
@@ -61,7 +61,7 @@ describe("inputform", () => {
 
     await addButton.trigger("click")
 
-    expect(fb.writeFeeds).not.toHaveBeenCalled()
+    expect(db.writeFeeds).not.toHaveBeenCalled()
   })
   test("doesn't call writeFeeds when message or label is empty", async () => {
     const wrapper = factory()
@@ -74,7 +74,7 @@ describe("inputform", () => {
 
     await addButton.trigger("click")
 
-    expect(fb.writeFeeds).not.toHaveBeenCalled()
+    expect(db.writeFeeds).not.toHaveBeenCalled()
   })
   test("calls writeFeeds with correct values", async () => {
     const wrapper = factory()
@@ -87,6 +87,6 @@ describe("inputform", () => {
 
     await addButton.trigger("click")
 
-    expect(fb.writeFeeds).toHaveBeenCalledWith("test message", "test label")
+    expect(db.writeFeeds).toHaveBeenCalledWith("test message", "test label")
   })
 })

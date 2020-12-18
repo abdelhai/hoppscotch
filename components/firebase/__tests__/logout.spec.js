@@ -1,15 +1,15 @@
 import logout from "../logout"
 import { shallowMount, createLocalVue } from "@vue/test-utils"
 
-jest.mock("~/helpers/fb", () => ({
+jest.mock("~/helpers/db", () => ({
   __esModule: true,
 
-  fb: {
+  db: {
     signOutUser: jest.fn(() => Promise.resolve()),
   },
 }))
 
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 const $toast = {
   info: jest.fn(),
@@ -30,7 +30,7 @@ const factory = () =>
   })
 
 beforeEach(() => {
-  fb.signOutUser.mockClear()
+  db.signOutUser.mockClear()
   $toast.info.mockClear()
   $toast.show.mockClear()
 })
@@ -49,11 +49,11 @@ describe("logout", () => {
 
     await button.trigger("click")
 
-    expect(fb.signOutUser).toHaveBeenCalledTimes(1)
+    expect(db.signOutUser).toHaveBeenCalledTimes(1)
   })
 
   test("failed signout request fires a error toast", async () => {
-    fb.signOutUser.mockImplementationOnce(() => Promise.reject("test reject"))
+    db.signOutUser.mockImplementationOnce(() => Promise.reject("test reject"))
 
     const wrapper = factory()
     const button = wrapper.find("button")

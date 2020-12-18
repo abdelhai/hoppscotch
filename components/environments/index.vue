@@ -65,7 +65,7 @@
 </style>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   data() {
@@ -84,9 +84,7 @@ export default {
   },
   computed: {
     environments() {
-      return fb.currentUser !== null
-        ? fb.currentEnvironments
-        : this.$store.state.postwoman.environments
+      return db.currentEnvironments
     },
   },
   watch: {
@@ -153,11 +151,9 @@ export default {
       this.$data.editingEnvironmentIndex = undefined
     },
     syncEnvironments() {
-      if (fb.currentUser !== null) {
-        if (fb.currentSettings[1].value) {
-          fb.writeEnvironments(JSON.parse(JSON.stringify(this.$store.state.postwoman.environments)))
+        if (db.currentSettings[1].value) {
+          db.writeEnvironments(JSON.parse(JSON.stringify(this.$store.state.postwoman.environments)))
         }
-      }
     },
   },
   beforeDestroy() {

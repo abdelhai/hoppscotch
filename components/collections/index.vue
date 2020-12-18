@@ -86,7 +86,7 @@
 </style>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   props: {
@@ -113,14 +113,10 @@ export default {
   },
   computed: {
     collections() {
-      return fb.currentUser !== null
-        ? fb.currentCollections
-        : this.$store.state.postwoman.collections
+      return db.currentCollections
     },
     filteredCollections() {
-      const collections =
-        fb.currentUser !== null ? fb.currentCollections : this.$store.state.postwoman.collections
-
+      const collections = db.currentCollections
       if (!this.filterText) return collections
 
       const filterText = this.filterText.toLowerCase()
@@ -240,11 +236,9 @@ export default {
       this.$data.editingRequestIndex = undefined
     },
     syncCollections() {
-      if (fb.currentUser !== null) {
-        if (fb.currentSettings[0].value) {
-          fb.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
+        if (db.currentSettings[0].value) {
+          db.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
         }
-      }
     },
   },
   beforeDestroy() {

@@ -3,7 +3,7 @@
     <pw-section class="green" :label="$t('account')" ref="account" no-legend>
       <div class="flex flex-col">
         <label>{{ $t("account") }}</label>
-          <p v-for="setting in fb.currentSettings" :key="setting.id">
+          <p v-for="setting in db.currentSettings" :key="setting.id">
             <pw-toggle
               :key="setting.name"
               :on="setting.value"
@@ -13,7 +13,7 @@
               {{ setting.value ? $t("enabled") : $t("disabled") }}
             </pw-toggle>
           </p>
-          <p v-if="fb.currentSettings.length !== 3">
+          <p v-if="db.currentSettings.length !== 3">
             <button class="" @click="initSettings">
               <i class="material-icons">sync</i>
               <span>{{ $t("turn_on") + " " + $t("sync") }}</span>
@@ -159,7 +159,7 @@
 </template>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 import { hasExtensionInstalled } from "../helpers/strategies/ExtensionStrategy"
 
 export default {
@@ -193,7 +193,7 @@ export default {
       },
 
       doneButton: '<i class="material-icons">done</i>',
-      fb,
+      db,
     }
   },
   watch: {
@@ -215,7 +215,7 @@ export default {
       this.$store.commit("postwoman/applySetting", [key, this.settings[key]])
     },
     toggleSettings(name, value) {
-      fb.writeSettings(name, !value)
+      db.writeSettings(name, !value)
       if (name === "syncCollections" && value) {
         this.syncCollections()
       }
@@ -224,9 +224,9 @@ export default {
       }
     },
     initSettings() {
-      fb.writeSettings("syncHistory", true)
-      fb.writeSettings("syncCollections", true)
-      fb.writeSettings("syncEnvironments", true)
+      db.writeSettings("syncHistory", true)
+      db.writeSettings("syncCollections", true)
+      db.writeSettings("syncEnvironments", true)
     },
     resetProxy({ target }) {
       this.settings.PROXY_URL = `https://postwoman.apollosoftware.xyz/`
@@ -237,18 +237,14 @@ export default {
       setTimeout(() => (target.innerHTML = '<i class="material-icons">clear_all</i>'), 1000)
     },
     syncCollections() {
-      if (fb.currentUser !== null) {
-        if (fb.currentSettings[0].value) {
-          fb.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
+        if (db.currentSettings[0].value) {
+          db.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
         }
-      }
     },
     syncEnvironments() {
-      if (fb.currentUser !== null) {
-        if (fb.currentSettings[1].value) {
-          fb.writeEnvironments(JSON.parse(JSON.stringify(this.$store.state.postwoman.environments)))
+        if (db.currentSettings[1].value) {
+          db.writeEnvironments(JSON.parse(JSON.stringify(this.$store.state.postwoman.environments)))
         }
-      }
     },
   },
   computed: {

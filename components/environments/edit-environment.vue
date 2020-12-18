@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   props: {
@@ -135,11 +135,9 @@ export default {
   },
   methods: {
     syncEnvironments() {
-      if (fb.currentUser !== null) {
-        if (fb.currentSettings[1].value) {
-          fb.writeEnvironments(JSON.parse(JSON.stringify(this.$store.state.postwoman.environments)))
+        if (db.currentSettings[1].value) {
+          db.writeEnvironments(JSON.parse(JSON.stringify(this.$store.state.postwoman.environments)))
         }
-      }
     },
     clearContent({ target }) {
       this.$store.commit("postwoman/removeVariables", [])

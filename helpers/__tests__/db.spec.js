@@ -1,4 +1,4 @@
-import { FirebaseInstance } from "../fb"
+import { Database } from "../db"
 
 import { MockAuthentication, MockFirestore, MockFirebaseSdk } from "firebase-mock"
 
@@ -145,12 +145,12 @@ function signOutUser() {
   mocksdk.auth().changeAuthState(null)
 }
 
-describe("FirebaseInstance", () => {
+describe("Database", () => {
   describe("signInUserWithGoogle", () => {
     test("resolves when the firebase request resolves", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithPopup")
 
-      const fb = new FirebaseInstance(mocksdk, {
+      const db = new Database(mocksdk, {
         google: () => {},
       })
 
@@ -163,7 +163,7 @@ describe("FirebaseInstance", () => {
     test("rejects when the firebase request rejects", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithPopup")
 
-      const fb = new FirebaseInstance(mocksdk, {
+      const db = new Database(mocksdk, {
         google: () => {},
       })
 
@@ -176,7 +176,7 @@ describe("FirebaseInstance", () => {
     test("throws the error the firebase request throws", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithPopup")
 
-      const fb = new FirebaseInstance(mocksdk, {
+      const db = new Database(mocksdk, {
         google: () => {},
       })
 
@@ -189,7 +189,7 @@ describe("FirebaseInstance", () => {
     test("resolves the response the firebase request resolves", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithPopup")
 
-      const fb = new FirebaseInstance(mocksdk, {
+      const db = new Database(mocksdk, {
         google: () => {},
       })
 
@@ -204,7 +204,7 @@ describe("FirebaseInstance", () => {
     test("resolves when the firebase request resolves", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithPopup")
 
-      const fb = new FirebaseInstance(mocksdk, {
+      const db = new Database(mocksdk, {
         github: () => {
           return {
             addScope: () => {},
@@ -221,7 +221,7 @@ describe("FirebaseInstance", () => {
     test("rejects when the firebase request rejects", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithPopup")
 
-      const fb = new FirebaseInstance(mocksdk, {
+      const db = new Database(mocksdk, {
         github: () => {
           return {
             addScope: () => {},
@@ -238,7 +238,7 @@ describe("FirebaseInstance", () => {
     test("throws the error the firebase request throws", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithPopup")
 
-      const fb = new FirebaseInstance(mocksdk, {
+      const db = new Database(mocksdk, {
         github: () => {
           return {
             addScope: () => {},
@@ -257,7 +257,7 @@ describe("FirebaseInstance", () => {
 
       const addScopeMock = jest.fn()
 
-      const fb = new FirebaseInstance(mocksdk, {
+      const db = new Database(mocksdk, {
         github: () => {
           return {
             addScope: addScopeMock,
@@ -275,7 +275,7 @@ describe("FirebaseInstance", () => {
     test("resolves the response the firebase request resolves", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithPopup")
 
-      const fb = new FirebaseInstance(mocksdk, {
+      const db = new Database(mocksdk, {
         github: () => {
           return {
             addScope: () => {},
@@ -294,7 +294,7 @@ describe("FirebaseInstance", () => {
     test("email and password are properly passed to the firebase request", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithEmailAndPassword")
 
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -316,7 +316,7 @@ describe("FirebaseInstance", () => {
     test("resolves when the firebase request resolves", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithEmailAndPassword")
 
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -329,7 +329,7 @@ describe("FirebaseInstance", () => {
     test("rejects when the firebase request rejects", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithEmailAndPassword")
 
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -342,7 +342,7 @@ describe("FirebaseInstance", () => {
     test("throws the error the firebase request throws", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithEmailAndPassword")
 
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -355,7 +355,7 @@ describe("FirebaseInstance", () => {
     test("resolves the response the firebase request resolves", async () => {
       const fbFunc = jest.spyOn(mockAuth, "signInWithEmailAndPassword")
 
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -368,21 +368,21 @@ describe("FirebaseInstance", () => {
   })
   describe("signOutUser", () => {
     test("resolves for a proper request with authentication", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signInUser()
 
       await expect(fb.signOutUser()).resolves.toBeUndefined()
     })
 
     test("rejects for a request with no user logged in", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signOutUser()
 
       await expect(fb.signOutUser()).rejects.toBeDefined()
     })
 
     test("asks firebase to signOut the user", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signInUser()
 
       const fn = jest.spyOn(mocksdk.auth(), "signOut")
@@ -394,7 +394,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("sets the currentUser field to null", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signInUser()
 
       await fb.signOutUser()
@@ -404,21 +404,21 @@ describe("FirebaseInstance", () => {
   })
   describe("writeFeeds", () => {
     test("resolves for a proper request with auth", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signInUser()
 
       await expect(fb.writeFeeds("Test Message", "Test Label")).resolves.toBeUndefined()
     })
 
     test("rejects if user not authenticated", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signOutUser()
 
       await expect(fb.writeFeeds("Test Message", "Test Label")).rejects.toBeDefined()
     })
 
     test("stored feed object has proper structure", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signInUser()
 
       await fb.writeFeeds("Test Message", "Test Label")
@@ -446,7 +446,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("stored feed object has proper values", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signInUser()
 
       await fb.writeFeeds("Test Message", "Test Label")
@@ -476,7 +476,7 @@ describe("FirebaseInstance", () => {
 
   describe("deleteFeed", () => {
     test("resolves for proper request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signInUser()
 
       await fb.writeFeeds("Test Message", "Test Label")
@@ -495,7 +495,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("rejects if user not authenticated", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signInUser()
 
       await fb.writeFeeds("Test Message", "Test Label")
@@ -516,7 +516,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("deletes feed if ID is correct and valid", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signInUser()
 
       await fb.writeFeeds("Test Message", "Test Label")
@@ -547,7 +547,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("rejects if the ID is null", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
       signInUser()
 
       await fb.writeFeeds("Test Message", "Test Label")
@@ -558,7 +558,7 @@ describe("FirebaseInstance", () => {
 
   describe("writeSettings", () => {
     test("resolves for a proper update request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -566,7 +566,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("rejects for an unauthenticated request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -574,7 +574,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("rejects if the setting is null", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -582,7 +582,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("resolves even if the value is null", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -590,7 +590,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("writes a new setting if not existing", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -608,7 +608,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("updates setting if existing", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -626,7 +626,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("new setting object has proper fields", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -653,7 +653,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("new setting object has proper values", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -680,7 +680,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("updated setting object has proper fields", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -707,7 +707,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("updated setting object fields has proper values", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -763,7 +763,7 @@ describe("FirebaseInstance", () => {
     }
 
     test("resolves for a proper write request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -771,7 +771,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("rejects if the user is not autenticated", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -779,7 +779,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("stores the exact same field values in firestore", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -802,7 +802,7 @@ describe("FirebaseInstance", () => {
 
   describe("deleteHistory", () => {
     test("resolves for proper authenticated request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -825,7 +825,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("rejects if the user is not authenticated", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -848,7 +848,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("performs the deletion on firestore", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -885,7 +885,7 @@ describe("FirebaseInstance", () => {
 
   describe("clearHistory", () => {
     test("resolves for a proper authenticated request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -893,7 +893,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("rejects for a non-authenticated request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -901,7 +901,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("actually performs the deletion", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -977,7 +977,7 @@ describe("FirebaseInstance", () => {
     }
 
     test("resolves for a proper authenticated request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -987,7 +987,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("rejects for a non-authenticated request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -999,7 +999,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("updates only the star data for the requested entry", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -1047,7 +1047,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("does not update the data for the non-requested entries", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -1094,7 +1094,7 @@ describe("FirebaseInstance", () => {
 
   describe("writeCollections", () => {
     test("resolves for proper authenticated request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -1102,7 +1102,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("rejects for non-authenticated request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -1110,7 +1110,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("stores data on firestore with proper structure", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -1138,7 +1138,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("stores data on firestore with fields having proper values", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -1168,7 +1168,7 @@ describe("FirebaseInstance", () => {
 
   describe("writeEnvironments", () => {
     test("resolves for proper authenticated request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -1176,7 +1176,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("rejects for non-authenticated request", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signOutUser()
 
@@ -1184,7 +1184,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("stores data on firestore with proper structure", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 
@@ -1212,7 +1212,7 @@ describe("FirebaseInstance", () => {
     })
 
     test("stores data on firestore with fields having proper values", async () => {
-      const fb = new FirebaseInstance(mocksdk)
+      const db = new Database(mocksdk)
 
       signInUser()
 

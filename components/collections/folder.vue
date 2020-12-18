@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   name: "folder",
@@ -124,11 +124,9 @@ export default {
   },
   methods: {
     syncCollections() {
-      if (fb.currentUser !== null) {
-        if (fb.currentSettings[0].value) {
-          fb.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
+        if (db.currentSettings[0].value) {
+          db.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
         }
-      }
     },
     toggleShowChildren() {
       this.showChildren = !this.showChildren

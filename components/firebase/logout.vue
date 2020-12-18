@@ -8,18 +8,18 @@
 </template>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   data() {
     return {
-      fb,
+      db,
     }
   },
   methods: {
     async logout() {
       try {
-        await fb.signOutUser()
+        await db.signOutUser()
 
         this.$toast.info(this.$t("logged_out"), {
           icon: "vpn_key",

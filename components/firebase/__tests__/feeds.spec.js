@@ -1,10 +1,10 @@
 import feeds from "../feeds"
 import { shallowMount } from "@vue/test-utils"
 
-jest.mock("~/helpers/fb", () => ({
+jest.mock("~/helpers/db", () => ({
   __esModule: true,
 
-  fb: {
+  db: {
     currentFeeds: [
       {
         id: "test1",
@@ -27,7 +27,7 @@ jest.mock("~/helpers/fb", () => ({
   },
 }))
 
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 const factory = () =>
   shallowMount(feeds, {
@@ -40,7 +40,7 @@ const factory = () =>
   })
 
 beforeEach(() => {
-  fb.deleteFeed.mockClear()
+  db.deleteFeed.mockClear()
 })
 
 describe("feeds", () => {
@@ -107,7 +107,7 @@ describe("feeds", () => {
 
     await deleteButton.trigger("click")
 
-    expect(fb.deleteFeed).toHaveBeenCalledTimes(1)
+    expect(db.deleteFeed).toHaveBeenCalledTimes(1)
   })
 
   test("correct feed is passed to from the list for deletion", async () => {
@@ -117,11 +117,11 @@ describe("feeds", () => {
 
     await deleteButton.trigger("click")
 
-    expect(fb.deleteFeed).toHaveBeenCalledWith("test1")
+    expect(db.deleteFeed).toHaveBeenCalledWith("test1")
   })
 
   test("renders the 'empty' label if no elements in the current feeds", () => {
-    jest.spyOn(fb, "currentFeeds", "get").mockReturnValueOnce([])
+    jest.spyOn(db, "currentFeeds", "get").mockReturnValueOnce([])
 
     const wrapper = factory()
 

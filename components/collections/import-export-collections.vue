@@ -17,16 +17,16 @@
               </div>
               <div
                 v-tooltip.bottom="{
-                  content: !fb.currentUser
+                  content: !db.currentUser
                     ? $t('login_with_github_to') + $t('create_secret_gist')
-                    : fb.currentUser.provider !== 'github.com'
+                    : db.currentUser.provider !== 'github.com'
                     ? $t('login_with_github_to') + $t('create_secret_gist')
                     : null,
                 }"
               >
                 <button
                   :disabled="
-                    !fb.currentUser ? true : fb.currentUser.provider !== 'github.com' ? true : false
+                    !db.currentUser ? true : db.currentUser.provider !== 'github.com' ? true : false
                   "
                   class="icon"
                   @click="createCollectionGist"
@@ -48,10 +48,10 @@
       <div class="flex flex-col items-start p-2">
         <span
           v-tooltip="{
-            content: !fb.currentUser ? $t('login_first') : $t('replace_current'),
+            content: !db.currentUser ? $t('login_first') : $t('replace_current'),
           }"
         >
-          <button :disabled="!fb.currentUser" class="icon" @click="syncCollections">
+          <button :disabled="!db.currentUser" class="icon" @click="syncCollections">
             <i class="material-icons">folder_shared</i>
             <span>{{ $t("import_from_sync") }}</span>
           </button>
@@ -112,12 +112,12 @@
 </template>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   data() {
     return {
-      fb,
+      db,
       showJsonCode: false,
     }
   },
@@ -143,7 +143,7 @@ export default {
           },
           {
             headers: {
-              Authorization: `token ${fb.currentUser.accessToken}`,
+              Authorization: `token ${db.currentUser.accessToken}`,
               Accept: "application/vnd.github.v3+json",
             },
           }
@@ -255,13 +255,13 @@ export default {
       })
     },
     syncCollections() {
-      this.$store.commit("postwoman/replaceCollections", fb.currentCollections)
+      this.$store.commit("postwoman/replaceCollections", db.currentCollections)
       this.fileImported()
     },
     syncToFBCollections() {
-      if (fb.currentUser !== null) {
-        if (fb.currentSettings[0].value) {
-          fb.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
+      if (db.currentUser !== null) {
+        if (db.currentSettings[0].value) {
+          db.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
         }
       }
     },

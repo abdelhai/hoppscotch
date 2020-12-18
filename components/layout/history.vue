@@ -256,7 +256,7 @@ ol {
 
 <script>
 import findStatusGroup from "~/helpers/findStatusGroup"
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 const updateOnLocalStorage = (propertyName, property) =>
   window.localStorage.setItem(propertyName, JSON.stringify(property))
@@ -264,10 +264,7 @@ const updateOnLocalStorage = (propertyName, property) =>
 export default {
   data() {
     return {
-      history:
-        fb.currentUser !== null
-          ? fb.currentHistory
-          : JSON.parse(window.localStorage.getItem("history")) || [],
+      history: db.currentHistory || [],
       filterText: "",
       showFilter: false,
       isClearingHistory: false,
@@ -281,10 +278,7 @@ export default {
   },
   computed: {
     filteredHistory() {
-      this.history =
-        fb.currentUser !== null
-          ? fb.currentHistory
-          : JSON.parse(window.localStorage.getItem("history")) || []
+      this.history = db.currentHistory || []
       return this.history.filter((entry) => {
         const filterText = this.filterText.toLowerCase()
         return Object.keys(entry).some((key) => {
@@ -297,9 +291,7 @@ export default {
   },
   methods: {
     async clearHistory() {
-      if (fb.currentUser !== null) {
-        await fb.clearHistory()
-      }
+      await db.clearHistory()
       this.history = []
       this.filterText = ""
       this.disableHistoryClearing()
@@ -320,9 +312,7 @@ export default {
       )
     },
     async deleteHistory(entry) {
-      if (fb.currentUser !== null) {
-        await fb.deleteHistory(entry)
-      }
+        await db.deleteHistory(entry)
       this.history.splice(this.history.indexOf(entry), 1)
       if (this.history.length === 0) {
         this.filterText = ""
@@ -408,9 +398,7 @@ export default {
       this.showMore = !this.showMore
     },
     async toggleStar(entry) {
-      if (fb.currentUser !== null) {
-        await fb.toggleStar(entry, !entry.star)
-      }
+        await db.toggleStar(entry, !entry.star)
       entry.star = !entry.star
       updateOnLocalStorage("history", this.history)
     },

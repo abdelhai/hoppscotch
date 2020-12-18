@@ -819,7 +819,7 @@ import runTestScriptWithVariables from "~/helpers/postwomanTesting"
 import parseTemplateString from "~/helpers/templating"
 import { tokenRequest, oauthRedirect } from "~/helpers/oauth"
 import { cancelRunningRequest, sendNetworkRequest } from "~/helpers/network"
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 import { getEditorLangForMimeType } from "~/helpers/editorutils"
 import { hasPathParams, addPathParamsToVariables, getQueryParams } from "~/helpers/requestParams"
 import { parseUrlAndPath } from "~/helpers/utils/uri"
@@ -855,7 +855,7 @@ export default {
       editRequest: {},
       urlExcludes: {},
       activeSidebar: true,
-      fb,
+      db,
       customMethod: false,
       files: [],
       filenames: "",
@@ -1556,11 +1556,9 @@ export default {
           }
 
           this.$refs.historyComponent.addEntry(entry)
-          if (fb.currentUser !== null) {
-            if (fb.currentSettings[2].value) {
-              fb.writeHistory(entry)
+            if (db.currentSettings[2].value) {
+              db.writeHistory(entry)
             }
-          }
         })()
       } catch (error) {
         this.runningRequest = false
@@ -1613,11 +1611,9 @@ export default {
             }
 
             this.$refs.historyComponent.addEntry(entry)
-            if (fb.currentUser !== null) {
-              if (fb.currentSettings[2].value) {
-                fb.writeHistory(entry)
+              if (db.currentSettings[2].value) {
+                db.writeHistory(entry)
               }
-            }
             return
           } else {
             this.response.status = error.message

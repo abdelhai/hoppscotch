@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   data() {
     return {
-      fb,
+      db,
     }
   },
   methods: {
@@ -40,7 +40,7 @@ export default {
     },
     async signInWithGoogle() {
       try {
-        const { additionalUserInfo } = await fb.signInUserWithGoogle()
+        const { additionalUserInfo } = await db.signInUserWithGoogle()
 
         if (additionalUserInfo.isNewUser) {
           this.$toast.info(`${this.$t("turn_on")} ${this.$t("sync")}`, {
@@ -50,9 +50,9 @@ export default {
             action: {
               text: this.$t("yes"),
               onClick: (e, toastObject) => {
-                fb.writeSettings("syncHistory", true)
-                fb.writeSettings("syncCollections", true)
-                fb.writeSettings("syncEnvironments", true)
+                db.writeSettings("syncHistory", true)
+                db.writeSettings("syncCollections", true)
+                db.writeSettings("syncEnvironments", true)
                 this.$router.push({ path: "/settings" })
                 toastObject.remove()
               },
@@ -72,7 +72,7 @@ export default {
           // The provider account's email address.
           const email = err.email
           // Get sign-in methods for this email.
-          const methods = await fb.getSignInMethodsForEmail(email)
+          const methods = await db.getSignInMethodsForEmail(email)
 
           // Step 3.
           // If the user has several sign-in methods,
@@ -82,7 +82,7 @@ export default {
             // In real scenario, you should handle this asynchronously.
             const password = promptUserForPassword() // TODO: implement promptUserForPassword.
 
-            const user = await fb.signInWithEmailAndPassword(email, password)
+            const user = await db.signInWithEmailAndPassword(email, password)
             await user.linkWithCredential(pendingCred)
 
             this.showLoginSuccess()
@@ -97,7 +97,7 @@ export default {
             action: {
               text: this.$t("yes"),
               onClick: async (e, toastObject) => {
-                const { user } = await fb.signInWithGithub()
+                const { user } = await db.signInWithGithub()
                 await user.linkAndRetrieveDataWithCredential(pendingCred)
 
                 this.showLoginSuccess()
@@ -111,9 +111,9 @@ export default {
     },
     async signInWithGithub() {
       try {
-        const { credential, additionalUserInfo } = await fb.signInUserWithGithub()
+        const { credential, additionalUserInfo } = await db.signInUserWithGithub()
 
-        fb.setProviderInfo(credential.providerId, credential.accessToken)
+        db.setProviderInfo(credential.providerId, credential.accessToken)
 
         if (additionalUserInfo.isNewUser) {
           this.$toast.info(`${this.$t("turn_on")} ${this.$t("sync")}`, {
@@ -123,9 +123,9 @@ export default {
             action: {
               text: this.$t("yes"),
               onClick: (e, toastObject) => {
-                fb.writeSettings("syncHistory", true)
-                fb.writeSettings("syncCollections", true)
-                fb.writeSettings("syncEnvironments", true)
+                db.writeSettings("syncHistory", true)
+                db.writeSettings("syncCollections", true)
+                db.writeSettings("syncEnvironments", true)
                 this.$router.push({ path: "/settings" })
                 toastObject.remove()
               },
@@ -145,7 +145,7 @@ export default {
           // The provider account's email address.
           const email = err.email
           // Get sign-in methods for this email.
-          const methods = await fb.getSignInMethodsForEmail(email)
+          const methods = await db.getSignInMethodsForEmail(email)
 
           // Step 3.
           // If the user has several sign-in methods,
@@ -155,7 +155,7 @@ export default {
             // In real scenario, you should handle this asynchronously.
             const password = promptUserForPassword() // TODO: implement promptUserForPassword.
 
-            const user = await fb.signInWithEmailAndPassword(email, password)
+            const user = await db.signInWithEmailAndPassword(email, password)
             await user.linkWithCredential(pendingCred)
 
             this.showLoginSuccess()
@@ -170,7 +170,7 @@ export default {
             action: {
               text: this.$t("yes"),
               onClick: async (e, toastObject) => {
-                const { user } = await fb.signInUserWithGoogle()
+                const { user } = await db.signInUserWithGoogle()
                 await user.linkAndRetrieveDataWithCredential(pendingCred)
 
                 this.showLoginSuccess()

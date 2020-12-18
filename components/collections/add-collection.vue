@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   props: {
@@ -50,14 +50,9 @@ export default {
   },
   methods: {
     syncCollections() {
-      console.log("syncCollections")
-      if (fb.currentUser !== null) {
-        console.log("syncCollections currentUser")
-        if (fb.currentSettings[0].value) {
-          console.log("syncCollections currentUser currentSettings")
-          fb.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
+        if (db.currentSettings[0].value) {
+          db.writeCollections(JSON.parse(JSON.stringify(this.$store.state.postwoman.collections)))
         }
-      }
     },
     addNewCollection() {
       if (!this.$data.name) {

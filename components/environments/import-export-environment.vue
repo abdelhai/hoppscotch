@@ -17,16 +17,16 @@
               </div>
               <div
                 v-tooltip.bottom="{
-                  content: !fb.currentUser
+                  content: !db.currentUser
                     ? $t('login_with_github_to') + $t('create_secret_gist')
-                    : fb.currentUser.provider !== 'github.com'
+                    : db.currentUser.provider !== 'github.com'
                     ? $t('login_with_github_to') + $t('create_secret_gist')
                     : null,
                 }"
               >
                 <button
                   :disabled="
-                    !fb.currentUser ? true : fb.currentUser.provider !== 'github.com' ? true : false
+                    !db.currentUser ? true : db.currentUser.provider !== 'github.com' ? true : false
                   "
                   class="icon"
                   @click="createEnvironmentGist"
@@ -48,10 +48,10 @@
       <div class="flex flex-col items-start p-2">
         <span
           v-tooltip="{
-            content: !fb.currentUser ? $t('login_first') : $t('replace_current'),
+            content: !db.currentUser ? $t('login_first') : $t('replace_current'),
           }"
         >
-          <button :disabled="!fb.currentUser" class="icon" @click="syncEnvironments">
+          <button :disabled="!db.currentUser" class="icon" @click="syncEnvironments">
             <i class="material-icons">folder_shared</i>
             <span>{{ $t("import_from_sync") }}</span>
           </button>
@@ -112,12 +112,12 @@
 </template>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   data() {
     return {
-      fb,
+      db,
       showJsonCode: false,
     }
   },
@@ -143,7 +143,7 @@ export default {
           },
           {
             headers: {
-              Authorization: `token ${fb.currentUser.accessToken}`,
+              Authorization: `token ${db.currentUser.accessToken}`,
               Accept: "application/vnd.github.v3+json",
             },
           }
@@ -252,13 +252,13 @@ export default {
       })
     },
     syncEnvironments() {
-      this.$store.commit("postwoman/replaceEnvironments", fb.currentEnvironments)
+      this.$store.commit("postwoman/replaceEnvironments", db.currentEnvironments)
       this.fileImported()
     },
     syncToFBEnvironments() {
-      if (fb.currentUser !== null) {
-        if (fb.currentSettings[1].value) {
-          fb.writeEnvironments(JSON.parse(JSON.stringify(this.$store.state.postwoman.environments)))
+      if (db.currentUser !== null) {
+        if (db.currentSettings[1].value) {
+          db.writeEnvironments(JSON.parse(JSON.stringify(this.$store.state.postwoman.environments)))
         }
       }
     },

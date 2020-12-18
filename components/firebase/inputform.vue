@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   data() {
@@ -43,7 +43,7 @@ export default {
       if (!(this.message || this.label)) {
         return
       }
-      fb.writeFeeds(this.message, this.label)
+      db.writeFeeds(this.message, this.label)
       this.message = null
       this.label = null
     },

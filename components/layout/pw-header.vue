@@ -39,48 +39,7 @@
             </svg>
           </button>
         </a>
-        <v-popover v-if="fb.currentUser === null">
-          <button class="icon" v-tooltip="$t('login_with')">
-            <i class="material-icons">login</i>
-          </button>
-          <template slot="popover">
-            <login />
-          </template>
-        </v-popover>
-        <v-popover v-else>
-          <button
-            class="icon"
-            v-tooltip="
-              (fb.currentUser.displayName || '<label><i>Name not found</i></label>') +
-              '<br>' +
-              (fb.currentUser.email || '<label><i>Email not found</i></label>')
-            "
-            aria-label="Account"
-          >
-            <img
-              v-if="fb.currentUser.photoURL"
-              :src="fb.currentUser.photoURL"
-              class="rounded-full material-icons"
-              alt="Profile image"
-            />
-            <i v-else class="material-icons">account_circle</i>
-          </button>
-          <template slot="popover">
-            <div>
-              <nuxt-link :to="localePath('settings')" v-close-popover>
-                <button class="icon">
-                  <i class="material-icons">settings</i>
-                  <span>
-                    {{ $t("settings") }}
-                  </span>
-                </button>
-              </nuxt-link>
-            </div>
-            <!-- <div>
-              <logout />
-            </div> -->
-          </template>
-        </v-popover>
+
         <v-popover>
           <button class="icon" v-tooltip="$t('more')">
             <i class="material-icons">drag_indicator</i>
@@ -176,7 +135,7 @@ $responsiveWidth: 768px;
 <script>
 import intializePwa from "~/helpers/pwa"
 import { hasExtensionInstalled } from "~/helpers/strategies/ExtensionStrategy"
-import { fb } from "~/helpers/fb"
+import { db } from "~/helpers/db"
 
 export default {
   data() {
@@ -189,7 +148,7 @@ export default {
       showShortcuts: false,
       showSupport: false,
       navigatorShare: navigator.share,
-      fb,
+      db,
     }
   },
   async mounted() {
